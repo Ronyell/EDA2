@@ -4,7 +4,9 @@
 #include <time.h>
 
 
-#define TAMANHO_MAX 10000
+#define TAMANHO_MAX 1000000
+#define TAMANHO_VETOR 10000000
+
 
 using namespace std;
 
@@ -31,17 +33,26 @@ void displayHalf(int * vectorNumbers, int init, int end);
 
 
 void header();
-
+/*
+* O countingSort necessita de muita memória, dessa forma para que se possa rodar o
+* algoritmo de forma segura, delimitaremos um número de 10.000.000 no máximo
+*/
 int main(){
   int tamanhoAtual = 0;
 
   header();
 
-  cout << "Entre com o tamanho do Vetor:"<< endl;
-  tamanhoAtual = recebeNumero();
-  int * vetorNumeros = allocaVetor(tamanhoAtual);
+
+  do{
+    cout << "Entre com o tamanho do Vetor:"<< endl;
+    tamanhoAtual = recebeNumero();
+  }while(tamanhoAtual > TAMANHO_VETOR );
+
+  int * vetorNumeros = NULL;
 
   while( tamanhoAtual > 0){
+
+    vetorNumeros = allocaVetor(tamanhoAtual);
 
     inicializaVetor(vetorNumeros, tamanhoAtual);
     vetorNumeros = radixSort(vetorNumeros, tamanhoAtual);
@@ -53,12 +64,15 @@ int main(){
       printVetor(vetorNumeros, tamanhoAtual);
     }
 
-    cout << "Entre com o tamanho do Vetor:"<< endl;
-    tamanhoAtual = recebeNumero();
 
+    do{
+      cout << "Entre com o tamanho do Vetor:"<< endl;
+      tamanhoAtual = recebeNumero();
+    }while(tamanhoAtual > TAMANHO_VETOR );
+
+    free(vetorNumeros);
   }
 
-  free(vetorNumeros);
   return 0;
 }
 
@@ -85,10 +99,10 @@ int * allocaVetor(int tamanhoAtual){
 
 void countingSort(int * vetorNumeros, int inicio, int fim, int divisor){
   int menor = inicio, maior = inicio;
-  int tamanhoAtual = fim - inicio + 1;
+  int tamanhoAtual = fim - inicio;
 
     //Acha o range.
-  for(int contador = inicio; contador <= fim; contador++ ){
+  for(int contador = inicio; contador < fim; contador++ ){
     if((pegaValor(vetorNumeros[menor],divisor)) > (pegaValor(vetorNumeros[contador],divisor))){
       menor = contador;
     }
@@ -96,23 +110,22 @@ void countingSort(int * vetorNumeros, int inicio, int fim, int divisor){
     if((pegaValor(vetorNumeros[maior],divisor)) < (pegaValor(vetorNumeros[contador],divisor))){
       maior = contador;
     }
+
   }
 
-  cout << " Maior : " << vetorNumeros[maior]<< " Menor : "<< vetorNumeros[menor]<< endl;
+  // cout << " Maior : " << vetorNumeros[maior]<< " Menor : "<< vetorNumeros[menor]<< endl;
 
   int range  =  1 + pegaValor(vetorNumeros[maior], divisor) - pegaValor(vetorNumeros[menor], divisor);
   //Cria vetor com o tamanho do range e inicializa com 0
-  cout << "Range : " << range<< endl;
-  int * vetorAuxiliar = new int[range];
-  cout << "/////Range :\\\\\\" << range<< endl;
-  int * vetorAuxiliarRecurcao = new int[range];
+  int * vetorAuxiliar = allocaVetor(range);
+  int * vetorAuxiliarRecurcao = allocaVetor(range);
   for(int contador = 0; contador < range; contador ++){
     vetorAuxiliar[contador] = 0;
   }
 
 
   //Conta a quantidade de cada número no espaço do range
-  for(int contador = inicio; contador <= fim; contador++){
+  for(int contador = inicio; contador < fim; contador++){
     int posicao = pegaValor(vetorNumeros[contador], divisor) - pegaValor(vetorNumeros[menor], divisor);
     vetorAuxiliar[posicao] ++;
   }
@@ -123,49 +136,50 @@ void countingSort(int * vetorNumeros, int inicio, int fim, int divisor){
   for(int contador = 0; contador < range; contador++){
     vetorAuxiliar[contador] += vetorAuxiliar[contador - 1];
     vetorAuxiliarRecurcao[contador] = vetorAuxiliar[contador];
-    cout << "Posicao: " << contador << " Quantidade: " << vetorAuxiliar[contador] << endl;
+    //cout << "Posicao: " << contador << " Quantidade: " << vetorAuxiliar[contador] << endl;
   }
 
   //Ordena em um novo vetor
   int * vetorFinal = allocaVetor(tamanhoAtual);
 
-  for(int contador = fim ; contador >= inicio; contador--){
+  for(int contador = fim - 1; contador >= inicio; contador--){
     int posicao = pegaValor(vetorNumeros[contador],divisor) - pegaValor(vetorNumeros[menor],divisor);
     int posicaoFinal = vetorAuxiliar[posicao] - 1;
     if(posicaoFinal == -1)
       continue;
     vetorFinal[posicaoFinal] = vetorNumeros[contador];
     vetorAuxiliar[posicao]--;
-    cout << posicaoFinal << " "<< vetorFinal[posicaoFinal] << " " << endl;
+    //cout << posicaoFinal << " "<< vetorFinal[posicaoFinal] << " " << endl;
   }
 
   int contadorAux = 0;
-  for(int contador = inicio; contador <= fim; contador++){
+  for(int contador = inicio; contador < fim; contador++){
     vetorNumeros[contador] = vetorFinal[contadorAux];
     contadorAux++;
   }
 
   divisor = divisor / 10;
   for(int contador = 0; contador < range && divisor > 0 ; contador++){
-      int esquerda = 0;
-      int direita = 0;
+      int esquerda = inicio;
+      int direita = inicio;
 
       if(contador){
-        esquerda = vetorAuxiliarRecurcao[contador- 1];
+        esquerda = vetorAuxiliarRecurcao[contador- 1] + inicio;
       }
-      if (vetorAuxiliarRecurcao[contador] != esquerda ){
-        direita = vetorAuxiliarRecurcao[contador] - 1;
-      }else{
-        direita = vetorAuxiliarRecurcao[contador];
-      }
+        direita = vetorAuxiliarRecurcao[contador] + inicio;
 
-      if ((direita - esquerda)){
+      if ((direita - esquerda) > 1){
+        cout <<"------------Bucket---------"<< endl;
         displayHalf(vetorNumeros, esquerda, direita);
-        cout << "===========" << esquerda << " ======== "<< direita << endl;
+        cout <<"---------------------------"<< endl;
         countingSort(vetorNumeros, esquerda, direita, divisor);
       }
 
   }
+
+  free(vetorFinal);
+  free(vetorAuxiliarRecurcao);
+  free(vetorAuxiliar);
 
 }
 
@@ -173,8 +187,8 @@ void countingSort(int * vetorNumeros, int inicio, int fim, int divisor){
 int * radixSort(int * vetorNumeros, int tamanhoAtual){
   int divisor = acharDivisor(vetorNumeros, tamanhoAtual);
   printVetor(vetorNumeros, tamanhoAtual);
-  cout <<"///"<<endl;
-  countingSort(vetorNumeros, 0, tamanhoAtual - 1, divisor);
+
+  countingSort(vetorNumeros, 0, tamanhoAtual, divisor);
 
   return vetorNumeros;
 }
@@ -212,7 +226,7 @@ int pegaValor(int num, int divisor){
 }
 
 void displayHalf(int * vectorNumbers, int init, int end){
-  for(int count = init; count <= end; count++){
+  for(int count = init; count < end; count++){
     cout << vectorNumbers[count] << " ";
   }
 

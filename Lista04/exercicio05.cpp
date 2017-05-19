@@ -6,6 +6,8 @@ using namespace std;
 
 #define MILHA 4.0
 
+void header();
+
 double valorAbsoluto(double x);
 
 double calculaDistancia(double ocidente, double oriente);
@@ -21,6 +23,8 @@ void mergeSort(double *vectorNumbers, int init, int end);
 int main(){
     double ocidente, oriente;
 		int quantidadeCasas;
+
+    header();
 
     cout << "Digite a extremidade ocidental: ";
     cin >> ocidente;
@@ -173,5 +177,5 @@ double valorAbsoluto(double x){
    cout <<("Professor: Mauricio Serrano\n");
    cout <<("Aluno: Gustavo Vieira Braz Gonçalves\n");
    cout <<("Aluno: Ronyell Henrique dos Santos\n");
-   cout <<("Tema: Ordenação MergeSort Recursivo\n\n");
+   cout <<("Tema: Quantidade de bases\n\n");
  }

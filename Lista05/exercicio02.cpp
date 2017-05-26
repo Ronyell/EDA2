@@ -61,14 +61,13 @@ int merge(int *vectorNumbers, int init, int half, int end){
       if(count2 > end){
         end2 = true;
       }
-      if(vectorNumbers[count1] > 2*vectorNumbers[count2-1]){
-        countInversion = countInversion + (half - count1 + 1);
-        cout << "Partial: "<< countInversion << endl;
-      }else{
-        for(int countInAux = count1; countInAux < half; count1++){
-
+        for(int countInAux = count1; countInAux <= half; countInAux++){
+          if(vectorNumbers[countInAux] > 2*vectorNumbers[count2-1]){
+            countInversion = countInversion + (half - countInAux + 1);
+            break;
+          }
         }
-      }
+
     }
     countAux++;
   }

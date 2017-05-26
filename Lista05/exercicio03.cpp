@@ -44,6 +44,7 @@ void printMajority(int majorityNumber){
 
 int findMajority(int *vectorNumbers,  int initIndex,  int endIndex){
   int quantity = endIndex - initIndex + 1;
+
   if (quantity == 1){
     return vectorNumbers[initIndex];
   }

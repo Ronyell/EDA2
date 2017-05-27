@@ -14,12 +14,12 @@ int mergeSort(int *vectorNumbers, int init, int end);
 
 
 int main(){
-  int vectorNumbers[MAX_LENGHT] = {0,1,2,4,5,6,7,8,9,3};
+  int vectorNumbers[MAX_LENGHT]={45,49,46,28,69,32,4,66,58,22};
   header();
   //inicializesVector(vectorNumbers);
   displayVector(vectorNumbers, MAX_LENGHT);
   int countingInvesion = mergeSort(vectorNumbers, 0, MAX_LENGHT-1);
-  cout << "INVERSIONS: " << countingInvesion << endl;
+  cout << "Significant inversions: " << countingInvesion << endl;
   return 0;
 }
 
@@ -49,25 +49,26 @@ int merge(int *vectorNumbers, int init, int half, int end){
   int countAux = 0;
 
   while(!end1 && !end2){
-    if(vectorNumbers[count1] < vectorNumbers[count2]){
+    if(vectorNumbers[count1] <=vectorNumbers[count2]){
       vectorNumbersAux[countAux]=vectorNumbers[count1];
       count1++;
       if(count1 > half){
         end1 = true;
       }
     }else{
+      for(int countAuxInversion = count1; countAuxInversion <= half; countAuxInversion++){
+        if(vectorNumbers[countAuxInversion] > 2*vectorNumbers[count2]){
+          countInversion = countInversion + (half - countAuxInversion + 1);
+          // cout << vectorNumbers[count1] << " "<< vectorNumbers[count2] << "Inversion: "<<countInversion<<endl;
+          break;
+        }
+      }
+
       vectorNumbersAux[countAux]=vectorNumbers[count2];
       count2++;
       if(count2 > end){
         end2 = true;
       }
-        for(int countInAux = count1; countInAux <= half; countInAux++){
-          if(vectorNumbers[countInAux] > 2*vectorNumbers[count2-1]){
-            countInversion = countInversion + (half - countInAux + 1);
-            break;
-          }
-        }
-
     }
     countAux++;
   }
@@ -103,7 +104,7 @@ int mergeSort(int *vectorNumbers, int init, int end){
     countInversion = mergeSort(vectorNumbers,init,half);
     countInversion += mergeSort(vectorNumbers,half+1,end);
     countInversion += merge(vectorNumbers,init,half,end);
-    displayHalf(vectorNumbers, init,end);
+    displayHalf(vectorNumbers,init,end);
   }
   return countInversion;
 }

@@ -12,20 +12,17 @@ def maxPlan(values, allSum, quantity):
         return 0
 
     for i in range(1, quantity + 1):
-        for j in range(1, quantity + 1):
-            if j > i:
-                # print(str(i) + ' ' + str(j) + ' ' + str(allSum[i][j - 1]))
-                allSum[i][j] = allSum[i][j - 1]
-                # print(allSum)
+        for j in range(1, 12):
+            if values[i-1][1] > j:
+                allSum[i][j] = allSum[i - 1][j]
             else:
-                allSum[i][j] = max(min(values[i - 1][0], values[i - 1][1]) + allSum[i][j - 1], allSum[i - 1][j])
+                allSum[i][j] = max(allSum[i - 1][j], values[i - 1][0] + allSum[i - 1][j - values[i - 1][1]])
 
-    return allSum[quantity][quantity]
+    return allSum[quantity][11]
 
-values = [[10, 8], [1, 4], [7, 2], [7, 1]]
+values = [[1, 1], [6, 2], [18, 5], [22, 6], [28, 7]]
 quantity = len(values)
-allSum = [(quantity + 1)*[0] for count in range(quantity + 1)]
-
+allSum = [(12)*[0] for count in range(quantity + 1)]
 
 optimalPlan = maxPlan(values, allSum, quantity)
 print('Partial plans: ' + str(allSum))

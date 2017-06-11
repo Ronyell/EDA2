@@ -7,23 +7,26 @@
 # ele perdera processamento.
 
 
-def maxPlan(values, allSum, quantity):
+def maxPlan(valuesX, valuesS, allSum, quantity):
     if quantity == 0:
         return 0
 
     for i in range(1, quantity + 1):
-        for j in range(1, 12):
-            if values[i-1][1] > j:
+        for j in range(1, quantity + 1):
+            if i > j:
                 allSum[i][j] = allSum[i - 1][j]
+                pass
             else:
-                allSum[i][j] = max(allSum[i - 1][j], values[i - 1][0] + allSum[i - 1][j - values[i - 1][1]])
+                aux = min(valuesX[i - 1], valuesS[i - 1])
+                allSum[i][j] = max(allSum[i - 1][j], aux + allSum[i - 1][j - 1])
 
-    return allSum[quantity][11]
+    return allSum[quantity][quantity]
 
-values = [[1, 1], [6, 2], [18, 5], [22, 6], [28, 7]]
-quantity = len(values)
-allSum = [(12)*[0] for count in range(quantity + 1)]
+valuesX = [10, 1, 7, 7]
+valuesS = [8, 4, 2, 1]
+quantity = len(valuesS)
+allSum = [(quantity + 1)*[0] for count in range(quantity + 1)]
 
-optimalPlan = maxPlan(values, allSum, quantity)
+optimalPlan = maxPlan(valuesX, valuesS, allSum, quantity)
 print('Partial plans: ' + str(allSum))
 print('Value of an optimal plan: ' + str(optimalPlan))

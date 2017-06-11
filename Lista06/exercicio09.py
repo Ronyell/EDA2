@@ -8,25 +8,31 @@
 
 
 def maxPlan(valuesX, valuesS, allSum, quantity):
-    if quantity == 0:
-        return 0
+    allSum[0] = 0
+    allSum[1] = min(valuesS[0], valuesX[0])
 
+    print(allSum)
     for i in range(1, quantity + 1):
-        for j in range(1, quantity + 1):
-            if i > j:
-                allSum[i][j] = allSum[i - 1][j]
-                pass
-            else:
-                aux = min(valuesX[i - 1], valuesS[i - 1])
-                allSum[i][j] = max(allSum[i - 1][j], aux + allSum[i - 1][j - 1])
+        auxSum = 0
+        for j in range(0, i):
+            minMax = 0
+            for k in range(j, i):
+                minMax = minMax + min(valuesS[k - j], valuesX[k])
+            minMax = minMax + allSum[j - 1]
+            if minMax > auxSum:
+                auxSum = minMax
+        allSum[i] = auxSum
+        print(allSum)
+    return allSum[quantity]
 
-    return allSum[quantity][quantity]
-
+# valuesX = [1, 7, 3, 4]
+# valuesS = [10, 8, 6, 5]
+# 15^ 19v
 valuesX = [10, 1, 7, 7]
 valuesS = [8, 4, 2, 1]
 quantity = len(valuesS)
-allSum = [(quantity + 1)*[0] for count in range(quantity + 1)]
+allSum = (quantity + 1)*[0]
 
 optimalPlan = maxPlan(valuesX, valuesS, allSum, quantity)
-print('Partial plans: ' + str(allSum))
-print('Value of an optimal plan: ' + str(optimalPlan))
+print('Partial proccess: ' + str(allSum))
+print('Value of an optimal proccess: ' + str(optimalPlan))

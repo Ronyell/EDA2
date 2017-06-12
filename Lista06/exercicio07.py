@@ -1,11 +1,3 @@
-# Resposta A: Dado a tabela
-# |   | 1 | 2 | 3 | 4 |
-# | l | 5 | 2 | 1 | 2 |
-# | h | 4 | 8 | 9 | 3 |
-# Ele tera a solucao  0 + 8 + 1 + 2 = 11
-# Enquanto a solucao otima seria 5 + 0 + 9 + 2 = 16
-
-
 def maxPlan(values, quantity, partial):
     buy_price = values[0]
     partial[0] = 0

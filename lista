@@ -11,3 +11,26 @@ Exercícios 1,2,3,5,6,7,9,20,28
 Escolher 5
 
 Algorithm Design
+
+Class Node
+id
+info
+label
+List<Edge> neghbours
+
+Class Edge
+Node source
+Node target
+weight
+
+Class Graph
+List <Node> nodes
+List<Edge> edges // optional
+
+methods
+BFS(Node start)
+DFS(Node start, Node final)
+Graph Reverse()
+bool checkBipartit()
+bool checkDAG()
+

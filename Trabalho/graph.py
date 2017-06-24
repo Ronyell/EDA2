@@ -1,8 +1,5 @@
 import igraph
 
-from edge import Edge
-# from node import Node
-
 
 class Graph:
 
@@ -21,18 +18,23 @@ class Graph:
         self.nodes.append(node)
 
     def add_edge(self, edge):
-        self.adges.append(edge)
+        self.edges.append(edge)
 
     def plot_graph(self):
-        graph_plot = igraph.Graph()
-        graph_plot.add_vertices(self.V)
+        graph_plot = igraph.Graph(directed=False)
 
-        k = 0
-        for v in self.adj:
-            for n in v:
-                for i in range(len(v)):
-                    graph_plot.add_edges([(k, self.adj[k][i])])
-            k += 1
+        lenght = len(self.nodes)
+        graph_plot.add_vertices(lenght)
 
-        layout = graph_plot.layout("kk")
+        number = 0
+        for node in self.nodes:
+            number = node.set_number(number)
+            for neighbour in node.neighbours:
+                    number = neighbour.set_number(number)
+                    graph_plot.add_edges([(node.number, neighbour.number)])
+            graph_plot.vs[node.number]["info"] = node.info
+
+        print(str(graph_plot.get_edgelist()))
+        graph_plot.vs["label"] = graph_plot.vs["info"]
+        layout = graph_plot.layout_kamada_kawai()
         igraph.plot(graph_plot, layout=layout, margin=20)

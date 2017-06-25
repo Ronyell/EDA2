@@ -19,6 +19,7 @@ class Graph:
         else:
             self.edges = edges
         self.visit = []
+        self.number = 0
 
     def add_edge(self, edge):
         self.edges.append(edge)
@@ -96,8 +97,12 @@ class Graph:
                     pass
             common_friends[neighbour] = None
 
-        recommend_node = (
-            max(common_friends.iteritems(), key=operator.itemgetter(1))[0])
+        try:
+            recommend_node = (
+                max(common_friends.iteritems(), key=operator.itemgetter(1))[0])
+        except ValueError:
+            recommend_node = node
+            print(recommend_node)
         self.plot_graph_recommend(node, recommend_node, common_friends)
 
     def plot_graph(self):
@@ -129,11 +134,10 @@ class Graph:
         lenght = len(self.nodes)
         graph_plot.add_vertices(lenght)
 
-        number = 0
         for node in self.nodes:
-            number = node.set_number(number)
+            self.number = node.set_number(self.number)
             for neighbour in node.neighbours:
-                number = neighbour.set_number(number)
+                self.number = neighbour.set_number(self.number)
                 graph_plot.add_edges([(node.number, neighbour.number)])
             try:
                 if common_friends[node] is not None:
@@ -149,6 +153,7 @@ class Graph:
                 graph_plot.vs[node.number]["info"] = node.name
             elif node is node_recommend and common_friends[node] is not None:
                 graph_plot.vs[node.number]["color"] = "blue"
+            print(str(node) + str(node.number))
 
         graph_plot.to_undirected()
         graph_plot.vs["label"] = graph_plot.vs["info"]

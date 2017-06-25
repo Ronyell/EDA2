@@ -3,17 +3,19 @@ from edge import Edge
 from graph import Graph
 
 nodes = []
-nodes.append(Node(29, 'Pedro'))
-nodes.append(Node(1, 'Maria'))
-nodes.append(Node(99, 'Ana'))
-nodes.append(Node(11, 'Marta'))
-nodes.append(Node(23, 'Joao'))
-nodes.append(Node(54, 'Mario'))
-nodes.append(Node(51, 'Jorge'))
-nodes.append(Node(77, 'Matheus'))
-nodes.append(Node(88, 'Diego'))
-nodes.append(Node(35, 'Meyhil'))
-nodes.append(Node(18, 'Debora'))
+nodes.append(Node(29, 'Pedro', 'm'))
+nodes.append(Node(1, 'Maria', 'f'))
+nodes.append(Node(99, 'Ana', 'f'))
+nodes.append(Node(11, 'Marta', 'f'))
+nodes.append(Node(23, 'Joao', 'm'))
+nodes.append(Node(54, 'Mario', 'm'))
+nodes.append(Node(51, 'Jorge', 'm'))
+nodes.append(Node(77, 'Matheus', 'm'))
+nodes.append(Node(88, 'Diego', 'm'))
+nodes.append(Node(35, 'Meyhil', 'f'))
+nodes.append(Node(18, 'Debora', 'f'))
+# nodes.append(Node(12, 'Lara', 'f'))
+
 
 edges = []
 edges.append(Edge(nodes[0], nodes[1]))
@@ -40,4 +42,5 @@ for node in nodes:
 for edge in edges:
     graph.add_edge(edge)
 
+graph.connected()
 graph.plot_graph()

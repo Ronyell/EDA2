@@ -1,8 +1,9 @@
 class Node:
 
-    def __init__(self, key, info, neighbours=None, number=None):
+    def __init__(self, key, info, gender, neighbours=None, number=None):
         self.key = key
         self.info = info
+        self.gender = gender
         self.number = None
         if neighbours is None:
             neighbours = []

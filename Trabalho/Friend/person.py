@@ -1,8 +1,8 @@
-class Node:
+class Person:
 
-    def __init__(self, key, info, gender, neighbours=None, number=None):
+    def __init__(self, key, name, gender, neighbours=None, number=None):
         self.key = key
-        self.info = info
+        self.name = name
         self.gender = gender
         self.number = None
         if neighbours is None:
@@ -23,4 +23,4 @@ class Node:
         return number
 
     def __str__(self):
-        return self.info
+        return self.name
